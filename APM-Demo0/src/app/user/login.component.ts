@@ -4,24 +4,27 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { AuthService } from './auth.service';
+import { getShowUserName } from './state/user.reducer';
 
 @Component({
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   pageTitle = 'Log In';
 
   maskUserName: boolean;
 
-  constructor(private authService: AuthService, private router: Router, private store: Store<any>) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private store: Store<any>
+  ) {}
 
   ngOnInit(): void {
-    this.store.select('users').subscribe(users => {
-      if (users) {
-        this.maskUserName = users.showUserName
-      }
-    })
+    this.store
+      .select(getShowUserName)
+      .subscribe((showUserName) => (this.maskUserName = !showUserName));
   }
 
   cancel(): void {
@@ -30,8 +33,8 @@ export class LoginComponent implements OnInit {
 
   checkChanged(): void {
     this.store.dispatch({
-      type: '[User] Mask User Name'
-    })
+      type: '[User] Mask User Name',
+    });
   }
 
   login(loginForm: NgForm): void {

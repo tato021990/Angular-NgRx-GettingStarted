@@ -144,5 +144,6 @@
   },
   "rulesDirectory": [
     "codelyzer"
-  ]
+  ],
+  "autoFixOnSave": true
 }
